@@ -1,0 +1,22 @@
+# .github/workflows/trigger-vm-check.yml
+
+name: Trigger Org Member Check on VM
+
+on:
+  workflow_dispatch:  # Manual trigger only
+
+jobs:
+  run-on-vm:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH & Run Poll Script
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_PRIVATE_KEY }}
+          script: |
+            source ~/.bashrc
+            cd ~/github-monitor
+            node check-members.js
